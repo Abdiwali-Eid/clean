@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 
 import Image from "next/image";
 
+import SiteFooter from "@/components/SiteFooter";
 import SiteNav from "@/components/SiteNav";
 
 const themeStyles = {
@@ -197,84 +198,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <footer className="mt-auto border-t border-[#e7f3eb] bg-white py-12 dark:bg-[#102216] dark:border-[#1e3a2b]">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-start justify-between gap-8 md:flex-row">
-            <div className="max-w-xs">
-              <div className="mb-4 flex items-center gap-2 text-[#0d1b12] dark:text-white">
-                <div className="flex size-8 items-center justify-center rounded bg-primary text-[#0d1b12]">
-                  <span className="material-symbols-outlined text-lg">eco</span>
-                </div>
-                <span className="text-lg font-bold">CCAS</span>
-              </div>
-              <p className="text-sm text-gray-500 font-body">
-                Clean Cooking Association of Somalia is dedicated to promoting
-                clean, efficient, and sustainable cooking solutions.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-12 sm:grid-cols-3">
-              <div className="flex flex-col gap-3">
-                <h4 className="text-sm font-bold text-[#0d1b12] dark:text-white">
-                  Quick Links
-                </h4>
-                <a className="text-sm text-gray-500 hover:text-primary transition-colors" href="/about">
-                  About Us
-                </a>
-                <a className="text-sm text-gray-500 hover:text-primary transition-colors" href="/services">
-                  Services
-                </a>
-                <a className="text-sm text-gray-500 hover:text-primary transition-colors" href="/projects">
-                  Projects
-                </a>
-              </div>
-              <div className="flex flex-col gap-3">
-                <h4 className="text-sm font-bold text-[#0d1b12] dark:text-white">
-                  Resources
-                </h4>
-                <a className="text-sm text-gray-500 hover:text-primary transition-colors" href="#">
-                  Reports
-                </a>
-                <a className="text-sm text-gray-500 hover:text-primary transition-colors" href="#">
-                  News
-                </a>
-                <a className="text-sm text-gray-500 hover:text-primary transition-colors" href="#">
-                  Events
-                </a>
-              </div>
-              <div className="flex flex-col gap-3">
-                <h4 className="text-sm font-bold text-[#0d1b12] dark:text-white">
-                  Contact
-                </h4>
-                <a className="text-sm text-gray-500 hover:text-primary transition-colors" href="mailto:info@ccas.so">
-                  info@ccas.so
-                </a>
-                <a className="text-sm text-gray-500 hover:text-primary transition-colors" href="tel:+252615000000">
-                  +252 61 5000000
-                </a>
-                <a className="text-sm text-gray-500 hover:text-primary transition-colors" href="#">
-                  Mogadishu, Somalia
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-100 pt-8 dark:border-gray-800 md:flex-row">
-            <p className="text-xs text-gray-400">
-              © 2023 Clean Cooking Association of Somalia. All rights reserved.
-            </p>
-            <div className="flex gap-4">
-              <a className="text-gray-400 hover:text-primary transition-colors" href="#">
-                <span className="material-symbols-outlined text-xl">public</span>
-              </a>
-              <a className="text-gray-400 hover:text-primary transition-colors" href="#">
-                <span className="material-symbols-outlined text-xl">share</span>
-              </a>
-              <a className="text-gray-400 hover:text-primary transition-colors" href="#">
-                <span className="material-symbols-outlined text-xl">mail</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
