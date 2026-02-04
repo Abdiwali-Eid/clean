@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import SiteFooter from "@/components/SiteFooter";
 import SiteNav from "@/components/SiteNav";
 
@@ -132,12 +134,15 @@ export default function BlogPage() {
                     A landmark agreement to accelerate the adoption of clean cooking
                     solutions across rural regions in Somalia.
                   </p>
-                  <a className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400" href="#">
+                  <Link
+                    className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
+                    href="/blog/clean-cooking"
+                  >
                     Read more
                     <span className="material-symbols-outlined text-sm ml-1">
                       arrow_forward
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </article>
 
@@ -170,12 +175,15 @@ export default function BlogPage() {
                     Beyond convenience, clean cooking brings vital health improvements
                     and economic savings to households.
                   </p>
-                  <a className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400" href="#">
+                  <Link
+                    className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
+                    href="/blog/clean-cooking"
+                  >
                     Read more
                     <span className="material-symbols-outlined text-sm ml-1">
                       arrow_forward
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </article>
 
@@ -208,12 +216,15 @@ export default function BlogPage() {
                     Our latest data shows significant progress in reducing reliance on
                     harmful charcoal in pilot districts.
                   </p>
-                  <a className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400" href="#">
+                  <Link
+                    className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
+                    href="/blog/clean-cooking"
+                  >
                     Download Report
                     <span className="material-symbols-outlined text-sm ml-1">
                       download
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </article>
 
@@ -246,12 +257,15 @@ export default function BlogPage() {
                     Join us this Saturday for a hands-on demonstration on how to safely
                     connect and use LPG cylinders.
                   </p>
-                  <a className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400" href="#">
+                  <Link
+                    className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
+                    href="/blog/clean-cooking"
+                  >
                     View Details
                     <span className="material-symbols-outlined text-sm ml-1">
                       arrow_forward
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </article>
 
@@ -284,12 +298,15 @@ export default function BlogPage() {
                     Exploring the potential and challenges of solar-based cooking
                     technologies in the Horn of Africa.
                   </p>
-                  <a className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400" href="#">
+                  <Link
+                    className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
+                    href="/blog/clean-cooking"
+                  >
                     Read more
                     <span className="material-symbols-outlined text-sm ml-1">
                       arrow_forward
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </article>
 
@@ -322,12 +339,15 @@ export default function BlogPage() {
                     Our Director discusses the 5-year roadmap for achieving 100% clean
                     cooking access in urban centers.
                   </p>
-                  <a className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400" href="#">
+                  <Link
+                    className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
+                    href="/blog/clean-cooking"
+                  >
                     Read more
                     <span className="material-symbols-outlined text-sm ml-1">
                       arrow_forward
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </article>
             </div>

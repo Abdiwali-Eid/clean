@@ -6,9 +6,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-primary: #f57f26;
-  --color-primary-dark: #d76d1e;
-  --color-secondary: #68ac45;
+  --color-primary: #ea6d2b;
+  --color-primary-dark: #cf5f25;
+  --color-secondary: #6fab47;
   --color-accent-orange: #f97316;
   --color-background-light: #f9fafb;
   --color-background-dark: #111827;
