@@ -3,13 +3,27 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const requestHeaders = new Headers(request.headers);
+  const host = request.headers.get("host");
+
+  if (host) {
+    requestHeaders.set("x-forwarded-host", host);
+  }
+
+  const forwardedProto = request.headers.get("x-forwarded-proto");
+  if (!forwardedProto) {
+    const protocol = request.nextUrl.protocol.replace(":", "");
+    if (protocol) {
+      requestHeaders.set("x-forwarded-proto", protocol);
+    }
+  }
 
   if (!pathname.startsWith("/api/admin")) {
-    return NextResponse.next();
+    return NextResponse.next({ request: { headers: requestHeaders } });
   }
 
   if (pathname === "/api/admin/login") {
-    return NextResponse.next();
+    return NextResponse.next({ request: { headers: requestHeaders } });
   }
 
   const isAuthed = request.cookies.get("admin_session")?.value === "1";
@@ -17,9 +31,9 @@ export function middleware(request: NextRequest) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  return NextResponse.next();
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {
-  matcher: ["/api/admin/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

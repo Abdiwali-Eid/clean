@@ -1,11 +1,12 @@
 import { cookies } from "next/headers";
 
+import { listBlogPosts } from "@/lib/blog";
 import { isSupabaseConfigured, listSubmissions } from "@/lib/submissions";
 
 export const runtime = "nodejs";
 
 type AdminPageProps = {
-  searchParams?: { error?: string };
+  searchParams?: { error?: string; blogError?: string };
 };
 
 function formatKey(value: string) {
@@ -15,6 +16,7 @@ function formatKey(value: string) {
 }
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
+  const resolvedSearchParams = await searchParams;
   const cookieStore = await cookies();
   const isAuthed = cookieStore.get("admin_session")?.value === "1";
 
@@ -35,7 +37,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-lg dark:border-gray-800 dark:bg-surface-dark">
               <h2 className="text-xl font-bold">Sign in</h2>
-              {searchParams?.error ? (
+              {resolvedSearchParams?.error ? (
                 <p className="mt-3 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
                   Incorrect password. Try again.
                 </p>
@@ -84,12 +86,21 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
   let submissions = [] as Awaited<ReturnType<typeof listSubmissions>>;
   let loadError = "";
+  let blogPosts = [] as Awaited<ReturnType<typeof listBlogPosts>>;
+  let blogLoadError = "";
 
   try {
     submissions = await listSubmissions();
   } catch (error) {
     loadError =
       error instanceof Error ? error.message : "Unable to load submissions.";
+  }
+
+  try {
+    blogPosts = await listBlogPosts();
+  } catch (error) {
+    blogLoadError =
+      error instanceof Error ? error.message : "Unable to load blog posts.";
   }
   const totals = submissions.reduce<Record<string, number>>((acc, item) => {
     acc[item.type] = (acc[item.type] ?? 0) + 1;
@@ -182,6 +193,260 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               ))}
             </div>
           )}
+        </section>
+
+        <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-800 dark:bg-surface-dark">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-bold">Blog Manager</h2>
+              <p className="text-sm text-text-muted">
+                Add new blog posts and keep the site updated.
+              </p>
+            </div>
+          </div>
+
+          {resolvedSearchParams?.blogError ? (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              Unable to publish blog post. Ensure the `blog_posts` table exists in
+              Supabase or remove Supabase keys to use local storage.
+            </div>
+          ) : null}
+
+          <form
+            action="/api/admin/blog"
+            className="mt-6 grid gap-4 md:grid-cols-2"
+            method="post"
+          >
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold" htmlFor="title">
+                Title
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="title"
+                name="title"
+                placeholder="Blog title"
+                required
+                type="text"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold" htmlFor="slug">
+                Slug (optional)
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="slug"
+                name="slug"
+                placeholder="auto-generated-if-empty"
+                type="text"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold" htmlFor="category">
+                Category
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="category"
+                name="category"
+                placeholder="News, Impact, Report"
+                type="text"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold" htmlFor="excerpt">
+                Excerpt
+              </label>
+              <textarea
+                className="mt-2 min-h-[120px] w-full rounded-xl border border-gray-200 bg-background-light px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="excerpt"
+                name="excerpt"
+                placeholder="Short summary shown on the blog list"
+                required
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold" htmlFor="content">
+                Content
+              </label>
+              <textarea
+                className="mt-2 min-h-[180px] w-full rounded-xl border border-gray-200 bg-background-light px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="content"
+                name="content"
+                placeholder="Write the full article here"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold" htmlFor="imageUrl">
+                Image URL
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="imageUrl"
+                name="imageUrl"
+                placeholder="https://..."
+                type="url"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold" htmlFor="publishedAt">
+                Publish Date
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="publishedAt"
+                name="publishedAt"
+                type="date"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold" htmlFor="author">
+                Author
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="author"
+                name="author"
+                placeholder="Author name"
+                type="text"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold" htmlFor="authorRole">
+                Author Role
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="authorRole"
+                name="authorRole"
+                placeholder="Role or title"
+                type="text"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold" htmlFor="readTime">
+                Read Time
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="readTime"
+                name="readTime"
+                placeholder="5 min read"
+                type="text"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold" htmlFor="tags">
+                Tags (comma separated)
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="tags"
+                name="tags"
+                placeholder="Clean Cooking, LPG, Health"
+                type="text"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold" htmlFor="highlights">
+                Highlights (comma separated)
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="highlights"
+                name="highlights"
+                placeholder="Impact highlight 1, Impact highlight 2"
+                type="text"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold" htmlFor="nextSteps">
+                Next Steps (comma separated)
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="nextSteps"
+                name="nextSteps"
+                placeholder="Next step 1, Next step 2"
+                type="text"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold" htmlFor="stats">
+                Stats (comma separated)
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="stats"
+                name="stats"
+                placeholder="3-year program, 12 partners"
+                type="text"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <button
+                className="h-12 w-full rounded-xl bg-primary text-base font-bold text-[#0d1b12] shadow-lg shadow-primary/20 transition hover:bg-primary-dark"
+                type="submit"
+              >
+                Publish Blog Post
+              </button>
+            </div>
+          </form>
+
+          {blogLoadError ? (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {blogLoadError} Check your Supabase keys in `/.env.local` and restart
+              the server.
+            </div>
+          ) : null}
+
+          <div className="mt-8 grid gap-4">
+            {blogPosts.length === 0 ? (
+              <p className="text-sm text-text-muted">No blog posts yet.</p>
+            ) : (
+              blogPosts.map((post) => (
+                <div
+                  className="flex flex-col gap-2 rounded-2xl border border-gray-200 p-4 text-sm dark:border-gray-800"
+                  key={post.id}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <p className="text-base font-semibold text-text-main dark:text-white">
+                        {post.title}
+                      </p>
+                      <p className="text-xs text-text-muted">/{post.slug}</p>
+                    </div>
+                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                      {post.category || "Uncategorized"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-text-muted">
+                    {post.publishedAt
+                      ? new Date(post.publishedAt).toLocaleDateString()
+                      : "Unpublished"}
+                    {post.readTime ? ` • ${post.readTime}` : ""}
+                  </p>
+                  <p className="text-sm text-text-muted">{post.excerpt}</p>
+                </div>
+              ))
+            )}
+          </div>
         </section>
       </div>
     </div>
