@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 
 import { isSupabaseConfigured, listSubmissions } from "@/lib/submissions";
 
+export const runtime = "nodejs";
+
 type AdminPageProps = {
   searchParams?: { error?: string };
 };

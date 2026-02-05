@@ -1,5 +1,7 @@
 import { addSubmission } from "@/lib/submissions";
 
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
   const formData = await request.formData();
   const type = String(formData.get("formType") ?? "unknown");
