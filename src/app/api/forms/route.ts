@@ -1,4 +1,5 @@
 import { addSubmission } from "@/lib/submissions";
+import { uploadFormFile } from "@/lib/uploads";
 
 export const runtime = "nodejs";
 
@@ -14,7 +15,11 @@ export async function POST(request: Request) {
 
     let normalizedValue: string;
     if (value instanceof File) {
-      normalizedValue = value.name ? `${value.name} (${value.size} bytes)` : "";
+      if (!value.name || value.size === 0) {
+        normalizedValue = "";
+      } else {
+        normalizedValue = await uploadFormFile(value, type);
+      }
     } else {
       normalizedValue = value.toString();
     }

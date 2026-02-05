@@ -64,3 +64,8 @@ create table if not exists blog_posts (
 	created_at timestamptz not null default now()
 );
 ```
+
+### Supabase Storage (Uploads)
+
+- Create a public bucket named `form-uploads`.
+- This bucket stores files from forms (e.g. NGO concept notes).

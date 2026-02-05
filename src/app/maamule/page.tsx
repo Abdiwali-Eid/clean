@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cookies } from "next/headers";
 
 import { listBlogPosts } from "@/lib/blog";
@@ -13,6 +14,23 @@ function formatKey(value: string) {
   return value
     .replace(/_/g, " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function isImageValue(value: string) {
+  const lowerValue = value.toLowerCase();
+  return (
+    lowerValue.startsWith("http://") ||
+    lowerValue.startsWith("https://") ||
+    lowerValue.startsWith("/uploads/")
+  ) && /(\.png|\.jpg|\.jpeg|\.gif|\.webp|\.svg)(\?|#|$)/.test(lowerValue);
+}
+
+function isUrlValue(value: string) {
+  return (
+    value.startsWith("http://") ||
+    value.startsWith("https://") ||
+    value.startsWith("/uploads/")
+  );
 }
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
@@ -183,9 +201,77 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                         <p className="text-xs font-semibold text-text-muted">
                           {formatKey(key)}
                         </p>
-                        <p className="text-sm text-text-main dark:text-white">
-                          {Array.isArray(value) ? value.join(", ") : value}
-                        </p>
+                        <div className="text-sm text-text-main dark:text-white">
+                          {Array.isArray(value) ? (
+                            <div className="space-y-2">
+                              {value.map((entry) => (
+                                <div key={entry}>
+                                  {isImageValue(entry) ? (
+                                    <div className="space-y-2">
+                                      <a
+                                        className="text-primary underline"
+                                        href={entry}
+                                        rel="noreferrer"
+                                        target="_blank"
+                                      >
+                                        View upload
+                                      </a>
+                                      <Image
+                                        alt={key}
+                                        className="max-h-40 w-full rounded-xl border border-gray-200 object-cover dark:border-gray-800"
+                                        height={160}
+                                        src={entry}
+                                        unoptimized
+                                        width={480}
+                                      />
+                                    </div>
+                                  ) : isUrlValue(entry) ? (
+                                    <a
+                                      className="text-primary underline"
+                                      href={entry}
+                                      rel="noreferrer"
+                                      target="_blank"
+                                    >
+                                      {entry}
+                                    </a>
+                                  ) : (
+                                    entry
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          ) : isImageValue(value) ? (
+                            <div className="space-y-2">
+                              <a
+                                className="text-primary underline"
+                                href={value}
+                                rel="noreferrer"
+                                target="_blank"
+                              >
+                                View upload
+                              </a>
+                              <Image
+                                alt={key}
+                                className="max-h-40 w-full rounded-xl border border-gray-200 object-cover dark:border-gray-800"
+                                height={160}
+                                src={value}
+                                unoptimized
+                                width={480}
+                              />
+                            </div>
+                          ) : isUrlValue(value) ? (
+                            <a
+                              className="text-primary underline"
+                              href={value}
+                              rel="noreferrer"
+                              target="_blank"
+                            >
+                              {value}
+                            </a>
+                          ) : (
+                            value
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>

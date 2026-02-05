@@ -142,7 +142,12 @@ export default function NgoPartnerPage() {
                     and proposed collaboration area.
                   </p>
                 </div>
-                <form action="/api/forms" className="space-y-8" method="post">
+                <form
+                  action="/api/forms"
+                  className="space-y-8"
+                  encType="multipart/form-data"
+                  method="post"
+                >
                   <input
                     name="formType"
                     type="hidden"
