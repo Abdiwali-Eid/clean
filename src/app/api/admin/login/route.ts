@@ -1,3 +1,13 @@
+function getSafeRedirect(value: FormDataEntryValue | null) {
+  const raw = typeof value === "string" ? value.trim() : "";
+
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) {
+    return "/maamule";
+  }
+
+  return raw;
+}
+
 export async function GET() {
   return Response.redirect("/maamule", 303);
 }
@@ -5,7 +15,7 @@ export async function GET() {
 export async function POST(request: Request) {
   const formData = await request.formData();
   const password = String(formData.get("password") ?? "");
-  const redirectTo = String(formData.get("redirect") ?? "/maamule");
+  const redirectTo = getSafeRedirect(formData.get("redirect"));
 
   if (!process.env.ADMIN_PASSWORD || password !== process.env.ADMIN_PASSWORD) {
     return Response.redirect("/maamule?error=1", 303);
