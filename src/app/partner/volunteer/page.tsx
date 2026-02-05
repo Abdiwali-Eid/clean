@@ -129,13 +129,23 @@ export default function VolunteerPage() {
                     about your skills and availability.
                   </p>
                 </div>
-                <form className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <form
+                  action="/api/forms"
+                  className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6"
+                  method="post"
+                >
+                  <input
+                    name="formType"
+                    type="hidden"
+                    value="partner_volunteer"
+                  />
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-bold dark:text-white">
                       Full Name
                     </label>
                     <input
                       className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      name="fullName"
                       placeholder="Enter your full name"
                       required
                       type="text"
@@ -147,6 +157,7 @@ export default function VolunteerPage() {
                     </label>
                     <input
                       className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      name="email"
                       placeholder="email@example.com"
                       required
                       type="email"
@@ -158,6 +169,7 @@ export default function VolunteerPage() {
                     </label>
                     <input
                       className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      name="phone"
                       placeholder="+252 ..."
                       type="tel"
                     />
@@ -166,7 +178,10 @@ export default function VolunteerPage() {
                     <label className="text-sm font-bold dark:text-white">
                       Availability
                     </label>
-                    <select className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none">
+                    <select
+                      className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      name="availability"
+                    >
                       <option>Full-time</option>
                       <option>Part-time (Weekdays)</option>
                       <option>Part-time (Weekends)</option>
@@ -193,7 +208,9 @@ export default function VolunteerPage() {
                         >
                           <input
                             className="w-5 h-5 rounded text-primary border-gray-300 focus:ring-primary"
+                            name="skills"
                             type="checkbox"
+                            value={label}
                           />
                           <span className="text-sm font-medium">{label}</span>
                         </label>
@@ -206,6 +223,7 @@ export default function VolunteerPage() {
                     </label>
                     <textarea
                       className="w-full p-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none resize-none"
+                      name="motivation"
                       placeholder="Tell us about your motivation and what you hope to achieve as a volunteer..."
                       required
                       rows={5}

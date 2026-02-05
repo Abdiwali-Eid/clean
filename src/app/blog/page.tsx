@@ -45,13 +45,13 @@ export default function BlogPage() {
                   health, reducing deforestation, and empowering communities across
                   Somalia&apos;s capital.
                 </p>
-                <button
+                <Link
                   className="flex w-fit items-center gap-2 rounded-lg bg-primary px-6 py-3 text-base font-bold text-[#0d1b12] shadow-lg shadow-primary/20 transition-all hover:bg-green-400 hover:shadow-green-400/30"
-                  type="button"
+                  href="/blog/mogadishu-lpg-shift"
                 >
                   <span>Read Full Article</span>
                   <span className="material-symbols-outlined">arrow_forward</span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -136,7 +136,7 @@ export default function BlogPage() {
                   </p>
                   <Link
                     className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
-                    href="/blog/clean-cooking"
+                    href="/blog/ministry-energy-initiative"
                   >
                     Read more
                     <span className="material-symbols-outlined text-sm ml-1">
@@ -177,7 +177,7 @@ export default function BlogPage() {
                   </p>
                   <Link
                     className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
-                    href="/blog/clean-cooking"
+                    href="/blog/clean-cooking-benefits"
                   >
                     Read more
                     <span className="material-symbols-outlined text-sm ml-1">
@@ -218,7 +218,7 @@ export default function BlogPage() {
                   </p>
                   <Link
                     className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
-                    href="/blog/clean-cooking"
+                    href="/blog/quarterly-report-20"
                   >
                     Download Report
                     <span className="material-symbols-outlined text-sm ml-1">
@@ -259,7 +259,7 @@ export default function BlogPage() {
                   </p>
                   <Link
                     className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
-                    href="/blog/clean-cooking"
+                    href="/blog/lpg-safety-workshop"
                   >
                     View Details
                     <span className="material-symbols-outlined text-sm ml-1">
@@ -300,7 +300,7 @@ export default function BlogPage() {
                   </p>
                   <Link
                     className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
-                    href="/blog/clean-cooking"
+                    href="/blog/solar-cooking-alternative"
                   >
                     Read more
                     <span className="material-symbols-outlined text-sm ml-1">
@@ -341,7 +341,7 @@ export default function BlogPage() {
                   </p>
                   <Link
                     className="inline-flex items-center text-sm font-bold text-primary hover:text-green-400"
-                    href="/blog/clean-cooking"
+                    href="/blog/director-interview"
                   >
                     Read more
                     <span className="material-symbols-outlined text-sm ml-1">

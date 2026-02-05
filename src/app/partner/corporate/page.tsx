@@ -122,7 +122,16 @@ export default function CorporatePartnerPage() {
               </div>
             </div>
             <div className="lg:col-span-8">
-              <form className="bg-white dark:bg-surface-dark p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800">
+              <form
+                action="/api/forms"
+                className="bg-white dark:bg-surface-dark p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800"
+                method="post"
+              >
+                <input
+                  name="formType"
+                  type="hidden"
+                  value="partner_corporate"
+                />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-bold dark:text-white flex items-center gap-2">
@@ -130,6 +139,7 @@ export default function CorporatePartnerPage() {
                     </label>
                     <input
                       className="w-full h-12 px-4 rounded-xl bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      name="companyName"
                       placeholder="e.g. Energy Solutions Ltd"
                       required
                       type="text"
@@ -141,9 +151,11 @@ export default function CorporatePartnerPage() {
                     </label>
                     <select
                       className="w-full h-12 px-4 rounded-xl bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      defaultValue=""
+                      name="industry"
                       required
                     >
-                      <option value="" disabled selected>
+                      <option value="" disabled>
                         Select industry
                       </option>
                       <option>Energy &amp; Utilities</option>
@@ -162,6 +174,7 @@ export default function CorporatePartnerPage() {
                     </label>
                     <input
                       className="w-full h-12 px-4 rounded-xl bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      name="contactName"
                       placeholder="First and Last Name"
                       required
                       type="text"
@@ -173,6 +186,7 @@ export default function CorporatePartnerPage() {
                     </label>
                     <input
                       className="w-full h-12 px-4 rounded-xl bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      name="businessEmail"
                       placeholder="name@company.com"
                       required
                       type="email"
@@ -250,6 +264,7 @@ export default function CorporatePartnerPage() {
                   </label>
                   <textarea
                     className="w-full p-4 rounded-xl bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none resize-none"
+                    name="proposal"
                     placeholder="Describe how your organization envisions collaborating with CCAS..."
                     rows={5}
                   ></textarea>
@@ -258,8 +273,10 @@ export default function CorporatePartnerPage() {
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input
                       className="rounded border-gray-300 text-primary focus:ring-primary"
+                      name="agreeTerms"
                       required
                       type="checkbox"
+                      value="yes"
                     />
                     <span className="text-xs text-text-main/60 dark:text-white/60">
                       I agree to the CCAS Corporate Partnership Terms and Privacy

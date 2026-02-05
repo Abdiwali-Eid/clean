@@ -142,7 +142,12 @@ export default function NgoPartnerPage() {
                     and proposed collaboration area.
                   </p>
                 </div>
-                <form className="space-y-8">
+                <form action="/api/forms" className="space-y-8" method="post">
+                  <input
+                    name="formType"
+                    type="hidden"
+                    value="partner_ngo"
+                  />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col gap-2">
                       <label className="text-sm font-bold dark:text-white">
@@ -150,6 +155,7 @@ export default function NgoPartnerPage() {
                       </label>
                       <input
                         className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                        name="organizationName"
                         placeholder="Enter full organization name"
                         required
                         type="text"
@@ -161,9 +167,13 @@ export default function NgoPartnerPage() {
                       </label>
                       <select
                         className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                        defaultValue=""
+                        name="organizationType"
                         required
                       >
-                        <option value="">Select Type</option>
+                        <option value="" disabled>
+                          Select Type
+                        </option>
                         <option>International NGO</option>
                         <option>Local NGO / CBO</option>
                         <option>Intergovernmental Organization (IGO)</option>
@@ -178,6 +188,7 @@ export default function NgoPartnerPage() {
                       </label>
                       <input
                         className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                        name="headquartersCountry"
                         placeholder="e.g. Kenya, USA, Somalia"
                         type="text"
                       />
@@ -188,6 +199,7 @@ export default function NgoPartnerPage() {
                       </label>
                       <input
                         className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                        name="website"
                         placeholder="https://..."
                         type="url"
                       />
@@ -214,7 +226,9 @@ export default function NgoPartnerPage() {
                           >
                             <input
                               className="size-5 rounded border-gray-300 text-primary focus:ring-primary bg-background-light dark:bg-background-dark"
+                              name="focusAreas"
                               type="checkbox"
+                              value={label}
                             />
                             <span className="text-sm dark:text-white/80 group-hover:text-primary transition-colors">
                               {label}
@@ -256,8 +270,9 @@ export default function NgoPartnerPage() {
                           >
                             <input
                               className="mt-1 text-primary focus:ring-primary"
-                              name="collab_type"
+                              name="collabType"
                               type="radio"
+                              value={item.title}
                             />
                             <div>
                               <p className="text-sm font-bold">{item.title}</p>
@@ -282,6 +297,7 @@ export default function NgoPartnerPage() {
                       </p>
                       <textarea
                         className="w-full p-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none resize-none"
+                        name="proposal"
                         placeholder="Describe the objectives, geographic scope, and estimated resources..."
                         rows={6}
                       ></textarea>
@@ -293,6 +309,7 @@ export default function NgoPartnerPage() {
                       <div className="relative group">
                         <input
                           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                          name="conceptNote"
                           type="file"
                         />
                         <div className="w-full py-8 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl flex flex-col items-center justify-center gap-2 group-hover:bg-primary/5 transition-colors">
@@ -315,6 +332,7 @@ export default function NgoPartnerPage() {
                     </label>
                     <input
                       className="w-full h-12 px-4 rounded-lg bg-background-light dark:bg-background-dark border-gray-200 dark:border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      name="contactEmail"
                       placeholder="representative@organization.org"
                       required
                       type="email"

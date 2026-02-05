@@ -116,7 +116,8 @@ export default function ContactPage() {
                 edit_square
               </span>
             </h3>
-            <form className="flex flex-col gap-5">
+            <form action="/api/forms" className="flex flex-col gap-5" method="post">
+              <input name="formType" type="hidden" value="contact" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-semibold text-[#0d1b12] dark:text-gray-200">
@@ -124,7 +125,9 @@ export default function ContactPage() {
                   </label>
                   <input
                     className="w-full h-12 rounded-lg border border-[#d1dcd5] dark:border-[#2a4a35] bg-[#f8fcf9] dark:bg-[#102216] px-4 text-base outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:text-white transition-all placeholder:text-gray-400"
+                    name="fullName"
                     placeholder="Jane Doe"
+                    required
                     type="text"
                   />
                 </div>
@@ -134,7 +137,9 @@ export default function ContactPage() {
                   </label>
                   <input
                     className="w-full h-12 rounded-lg border border-[#d1dcd5] dark:border-[#2a4a35] bg-[#f8fcf9] dark:bg-[#102216] px-4 text-base outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:text-white transition-all placeholder:text-gray-400"
+                    name="email"
                     placeholder="jane@example.com"
+                    required
                     type="email"
                   />
                 </div>
@@ -149,6 +154,7 @@ export default function ContactPage() {
                 </label>
                 <input
                   className="w-full h-12 rounded-lg border border-[#d1dcd5] dark:border-[#2a4a35] bg-[#f8fcf9] dark:bg-[#102216] px-4 text-base outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:text-white transition-all placeholder:text-gray-400"
+                  name="organization"
                   placeholder="Company or NGO Name"
                   type="text"
                 />
@@ -159,7 +165,11 @@ export default function ContactPage() {
                   Subject <span className="text-accent-orange">*</span>
                 </label>
                 <div className="relative">
-                  <select className="w-full h-12 rounded-lg border border-[#d1dcd5] dark:border-[#2a4a35] bg-[#f8fcf9] dark:bg-[#102216] px-4 text-base outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:text-white appearance-none transition-all cursor-pointer">
+                  <select
+                    className="w-full h-12 rounded-lg border border-[#d1dcd5] dark:border-[#2a4a35] bg-[#f8fcf9] dark:bg-[#102216] px-4 text-base outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:text-white appearance-none transition-all cursor-pointer"
+                    name="subject"
+                    required
+                  >
                     <option>General Inquiry</option>
                     <option>Partnership Opportunities</option>
                     <option>Project Information</option>
@@ -177,13 +187,15 @@ export default function ContactPage() {
                 </label>
                 <textarea
                   className="w-full min-h-[140px] rounded-lg border border-[#d1dcd5] dark:border-[#2a4a35] bg-[#f8fcf9] dark:bg-[#102216] p-4 text-base outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:text-white resize-y transition-all placeholder:text-gray-400"
+                  name="message"
                   placeholder="How can we help you?"
+                  required
                 />
               </div>
 
               <button
                 className="mt-2 w-full h-12 bg-primary hover:bg-[#0fd650] text-[#0d1b12] font-bold rounded-lg shadow-md hover:shadow-lg transition-all transform active:scale-[0.99] flex items-center justify-center gap-2"
-                type="button"
+                type="submit"
               >
                 <span>Send Message</span>
                 <span className="material-symbols-outlined text-[20px]">
