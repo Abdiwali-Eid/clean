@@ -150,15 +150,7 @@ export default function ServicesPage() {
                 <p className="mb-6 flex-1 text-sm leading-relaxed text-gray-600 dark:text-gray-300 font-body">
                   {card.text}
                 </p>
-                <a
-                  className="inline-flex items-center text-sm font-bold text-accent-orange hover:text-accent-orange/80"
-                  href="#"
-                >
-                  Learn more
-                  <span className="material-symbols-outlined ml-1 text-lg">
-                    arrow_forward
-                  </span>
-                </a>
+                {/* Removed Learn more button as requested */}
               </div>
             ))}
           </div>
@@ -187,12 +179,18 @@ export default function ServicesPage() {
               </p>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
-              <button className="flex h-12 min-w-[160px] cursor-pointer items-center justify-center rounded-lg bg-primary px-6 text-base font-bold text-[#0d1b12] hover:bg-white hover:text-background-dark transition-all">
+              <a
+                href="/partner"
+                className="flex h-12 min-w-[160px] cursor-pointer items-center justify-center rounded-lg bg-primary px-6 text-base font-bold text-[#0d1b12] hover:bg-white hover:text-background-dark transition-all"
+              >
                 Become a Partner
-              </button>
-              <button className="flex h-12 min-w-[160px] cursor-pointer items-center justify-center rounded-lg border-2 border-primary/30 bg-transparent px-6 text-base font-bold text-primary hover:border-primary hover:bg-primary/10 transition-all">
+              </a>
+              <a
+                href="/donate"
+                className="flex h-12 min-w-[160px] cursor-pointer items-center justify-center rounded-lg border-2 border-primary/30 bg-transparent px-6 text-base font-bold text-primary hover:border-primary hover:bg-primary/10 transition-all"
+              >
                 Donate Now
-              </button>
+              </a>
             </div>
           </div>
         </div>

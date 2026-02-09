@@ -36,7 +36,7 @@ export default function Home() {
                   <div className="rounded-md shadow">
                     <a
                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-orange-600 md:py-4 md:text-lg md:px-10 transition-colors"
-                      href="#about"
+                      href="/about"
                     >
                       Learn More
                     </a>
@@ -44,7 +44,7 @@ export default function Home() {
                   <div className="mt-3 sm:mt-0 sm:ml-3">
                     <a
                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-orange-100 hover:bg-orange-200 dark:bg-gray-800 dark:text-orange-400 dark:hover:bg-gray-700 md:py-4 md:text-lg md:px-10 transition-colors"
-                      href="#contact"
+                      href="/partner"
                     >
                       Join Us
                     </a>
@@ -360,7 +360,7 @@ export default function Home() {
             <div className="inline-flex rounded-md shadow">
               <a
                 className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-50"
-                href="#"
+                href="/partner"
               >
                 Become a Member
               </a>
@@ -368,7 +368,7 @@ export default function Home() {
             <div className="ml-3 inline-flex rounded-md shadow">
               <a
                 className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-secondary hover:bg-green-600"
-                href="#"
+                href="/contact"
               >
                 Contact Us
               </a>
