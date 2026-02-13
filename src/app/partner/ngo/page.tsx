@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Link from "next/link";
 
 import SiteFooter from "@/components/SiteFooter";
 import SiteNav from "@/components/SiteNav";
@@ -34,9 +35,9 @@ export default function NgoPartnerPage() {
             <nav className="flex justify-center mb-6">
               <ol className="flex items-center space-x-2 text-sm text-primary font-medium">
                 <li>
-                  <a className="hover:underline" href="/partner">
+                  <Link className="hover:underline" href="/partner">
                     Partnership
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <span className="material-symbols-outlined text-xs">

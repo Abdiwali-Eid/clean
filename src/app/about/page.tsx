@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
 import SiteNav from "@/components/SiteNav";
 
@@ -101,12 +102,16 @@ export default function AboutPage() {
                   </span>
                 </div>
               </div>
-              <button className="mt-4 w-fit h-12 px-8 rounded-lg bg-white border border-gray-200 hover:border-primary hover:text-primary transition-all text-text-main font-bold shadow-sm flex items-center gap-2 group">
+              <a
+                className="mt-4 w-fit h-12 px-8 rounded-lg bg-white border border-gray-200 hover:border-primary hover:text-primary transition-all text-text-main font-bold shadow-sm flex items-center gap-2 group"
+                download
+                href="/file/sample-local-pdf.pdf"
+              >
                 <span>Read our Annual Report</span>
                 <span className="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">
                   arrow_forward
                 </span>
-              </button>
+              </a>
             </div>
             <div className="relative order-1 lg:order-2 h-[400px] lg:h-[500px] w-full">
               <div className="absolute inset-0 bg-primary/10 rounded-2xl transform translate-x-4 translate-y-4"></div>
@@ -296,12 +301,18 @@ export default function AboutPage() {
               stove to a family in need today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <button className="h-12 px-8 rounded-lg bg-text-main text-white font-bold hover:bg-black transition-colors shadow-lg">
+              <Link
+                className="h-12 px-8 rounded-lg bg-text-main text-white font-bold hover:bg-black transition-colors shadow-lg flex items-center justify-center"
+                href="/donate"
+              >
                 Make a Donation
-              </button>
-              <button className="h-12 px-8 rounded-lg bg-white/20 text-text-main font-bold border border-text-main/20 hover:bg-white/30 transition-colors backdrop-blur-sm">
+              </Link>
+              <Link
+                className="h-12 px-8 rounded-lg bg-white/20 text-text-main font-bold border border-text-main/20 hover:bg-white/30 transition-colors backdrop-blur-sm flex items-center justify-center"
+                href="/partner"
+              >
                 Partner With Us
-              </button>
+              </Link>
             </div>
           </div>
         </section>

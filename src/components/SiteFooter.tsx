@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function SiteFooter() {
   return (
@@ -30,24 +31,30 @@ export default function SiteFooter() {
             </h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link className="hover:text-white transition-colors" href="/">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#about">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/about"
+                >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/services"
+                >
                   Services
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link className="hover:text-white transition-colors" href="/blog">
                   Blogs
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import SiteFooter from "@/components/SiteFooter";
 import SiteNav from "@/components/SiteNav";
@@ -34,20 +35,20 @@ export default function Home() {
                 </p>
                 <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                   <div className="rounded-md shadow">
-                    <a
+                    <Link
                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-orange-600 md:py-4 md:text-lg md:px-10 transition-colors"
                       href="/about"
                     >
                       Learn More
-                    </a>
+                    </Link>
                   </div>
                   <div className="mt-3 sm:mt-0 sm:ml-3">
-                    <a
+                    <Link
                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-orange-100 hover:bg-orange-200 dark:bg-gray-800 dark:text-orange-400 dark:hover:bg-gray-700 md:py-4 md:text-lg md:px-10 transition-colors"
                       href="/partner"
                     >
                       Join Us
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -358,20 +359,20 @@ export default function Home() {
           </h2>
           <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
             <div className="inline-flex rounded-md shadow">
-              <a
+              <Link
                 className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-50"
                 href="/partner"
               >
                 Become a Member
-              </a>
+              </Link>
             </div>
             <div className="ml-3 inline-flex rounded-md shadow">
-              <a
+              <Link
                 className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-secondary hover:bg-green-600"
                 href="/contact"
               >
                 Contact Us
-              </a>
+              </Link>
             </div>
           </div>
         </div>
