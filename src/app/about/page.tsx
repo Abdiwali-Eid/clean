@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
 import SiteNav from "@/components/SiteNav";
+import { listLeadership } from "@/lib/leadership";
 
 const themeStyles = {
   "--color-primary": "#13ec5b",
@@ -16,7 +17,8 @@ const themeStyles = {
   fontFamily: '"Public Sans", sans-serif',
 } as CSSProperties;
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const leadership = await listLeadership();
   return (
     <div
       className="bg-background-light dark:bg-background-dark text-text-main dark:text-white antialiased overflow-x-hidden"
@@ -207,86 +209,36 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="group flex flex-col gap-4">
-                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden bg-gray-200 relative">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                    data-alt="Portrait of Ahmed Ali, Executive Director, wearing a suit and smiling"
-                    style={{
-                      backgroundImage:
-                        "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD98ag23cB9YgdwI7xL4JZ1u5uar0kKcDYz7PXM-S6ZqHxDePRe2SO01lT6-X0j0H-aurkvmY0dwoim-CFJX7Nh4fWvpeK8oZJB-eGk6HQ8t0pC_Bam8_GyhZ-YBVsOZACuljX3cVpEQGbslniAjm8YUA90P3WvNsknXrgYWm44pB5nIi4r4MgYC1KoehqIeAKiNmUnfyZ3Sfyr5CYTuSWL2SdhdQ_XNo7PrdtQKvnF3QJd0OZ7mqXT6BVWMWjfddq6Wg0RQ78PkppA')",
-                    }}
-                  ></div>
+              {leadership.map((member) => (
+                <div className="group flex flex-col gap-4" key={member.id}>
+                  <div className="w-full aspect-[3/4] rounded-xl overflow-hidden bg-gray-200 relative">
+                    {member.imageUrl ? (
+                      <img
+                        alt={member.altText || `Portrait of ${member.name}`}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        src={member.imageUrl}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-4xl font-semibold text-gray-500">
+                        {member.name
+                          .split(" ")
+                          .map((part) => part.charAt(0))
+                          .join("")
+                          .slice(0, 2)
+                          .toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="text-text-main dark:text-white text-lg font-bold">
+                      {member.name}
+                    </h3>
+                    <p className="text-primary font-medium text-sm">
+                      {member.role}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-text-main dark:text-white text-lg font-bold">
-                    Ahmed Ali
-                  </h3>
-                  <p className="text-primary font-medium text-sm">
-                    Executive Director
-                  </p>
-                </div>
-              </div>
-              <div className="group flex flex-col gap-4">
-                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden bg-gray-200 relative">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                    data-alt="Portrait of Fatima Nur, Program Manager, wearing a hijab and business attire"
-                    style={{
-                      backgroundImage:
-                        "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBBahSuE31qMWMt84gvlD98_tT13PI9EY4bEgH2DKODN-FZwlMMVW3dXDum2mCAKoUeJAY7a8evs_4vWfYyvXJteJy31dcWkCIyMCbTJWYGqklUEGttXBScdgxDX0YoXjoInn2tcLmwvGTgKlYKCC6kR7Hq8sZhRFNrN4ugy0Buc9ni6jtT15niRKm7TYcjrPBcQywzv8DbtxgBYGbJtbxLNX0K6UV8e0K6SC9-3NHVw7FNYTzSPdb0G44MxE7zsZcveGi5_-uskyLO')",
-                    }}
-                  ></div>
-                </div>
-                <div>
-                  <h3 className="text-text-main dark:text-white text-lg font-bold">
-                    Fatima Nur
-                  </h3>
-                  <p className="text-primary font-medium text-sm">
-                    Program Manager
-                  </p>
-                </div>
-              </div>
-              <div className="group flex flex-col gap-4">
-                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden bg-gray-200 relative">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                    data-alt="Portrait of Hassan Gedi, Community Outreach, smiling warmly"
-                    style={{
-                      backgroundImage:
-                        "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBpr8IuFrQx6o2LIE_KbK6vDG4UuhstOKb0_FVFtdjPaRWllEiUPKPQTQFBHVyDwrEp_jZos3SJyfLNg7n4HVPh4ofivH6bGKDQsWoZlxXmNVrMLqq8XTg0oGGqik50RsGz_ogVpn_zwI4E2MnnJH81yHt93vJRvoZlbEJCIWzdwGTww7nMfoAWSR7IX5JaV1-l2DYdpbgVztnoNbkJ-u7yYe1a2_bWutvXnWOShY60ovrLyYlxdMXVyoSk9E4JXzyeM2Iu4Tei_E0u')",
-                    }}
-                  ></div>
-                </div>
-                <div>
-                  <h3 className="text-text-main dark:text-white text-lg font-bold">
-                    Hassan Gedi
-                  </h3>
-                  <p className="text-primary font-medium text-sm">
-                    Community Outreach
-                  </p>
-                </div>
-              </div>
-              <div className="group flex flex-col gap-4">
-                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden bg-gray-200 relative">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                    data-alt="Portrait of Safia Abdi, Finance Officer, in professional attire"
-                    style={{
-                      backgroundImage:
-                        "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCxxEiu38E_sklLJIFeQIh58TfSHbuQPUT7EEZllqvXAGB0hUWrUr_xgcbICvDXWbeT9I4HuIdNcAIdkumIU-PY-215gTIcf_G5PFL9V6P8x-xOP87PYdwCVja3HRkaJMRgu6QCcA1zOEqzIi9BXz7ZUXST91MKcU0inIe8Z-nn0Se-G0IDkGlr7kvMecStQyRr7H-l3s2HDpDB9_O3EA0ZIml7wdXUMBp6R6EsJZmr8GaIVykY0CMr8txsPPL1c9GPV2jGDGCRJNuq')",
-                    }}
-                  ></div>
-                </div>
-                <div>
-                  <h3 className="text-text-main dark:text-white text-lg font-bold">
-                    Safia Abdi
-                  </h3>
-                  <p className="text-primary font-medium text-sm">
-                    Finance Officer
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>

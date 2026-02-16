@@ -63,6 +63,23 @@ create table if not exists blog_posts (
 	published_at timestamptz,
 	created_at timestamptz not null default now()
 );
+
+create table if not exists blog_categories (
+	id uuid primary key,
+	name text not null,
+	slug text not null unique,
+	created_at timestamptz not null default now()
+);
+
+create table if not exists leadership (
+	id uuid primary key,
+	name text not null,
+	role text not null,
+	image_url text,
+	alt_text text,
+	sort_order integer not null default 0,
+	created_at timestamptz not null default now()
+);
 ```
 
 ### Supabase Storage (Uploads)

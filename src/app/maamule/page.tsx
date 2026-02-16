@@ -1,13 +1,22 @@
 import Image from "next/image";
 import { cookies } from "next/headers";
 
+import SiteFooter from "@/components/SiteFooter";
+import SiteNav from "@/components/SiteNav";
 import { listBlogPosts } from "@/lib/blog";
+import { listBlogCategories } from "@/lib/categories";
+import { listLeadership } from "@/lib/leadership";
 import { isSupabaseConfigured, listSubmissions } from "@/lib/submissions";
 
 export const runtime = "nodejs";
 
 type AdminPageProps = {
-  searchParams?: { error?: string; blogError?: string };
+  searchParams?: {
+    error?: string;
+    blogError?: string;
+    categoryError?: string;
+    leadershipError?: string;
+  };
 };
 
 function formatKey(value: string) {
@@ -41,6 +50,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   if (!isAuthed) {
     return (
       <div className="min-h-screen bg-background-light dark:bg-background-dark text-text-main dark:text-white">
+        <SiteNav />
         <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-6 py-12">
           <div className="mb-10 flex flex-col gap-2">
             <p className="text-sm font-semibold uppercase tracking-wide text-primary">
@@ -98,6 +108,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             </div>
           </div>
         </div>
+        <SiteFooter />
       </div>
     );
   }
@@ -106,6 +117,10 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   let loadError = "";
   let blogPosts = [] as Awaited<ReturnType<typeof listBlogPosts>>;
   let blogLoadError = "";
+  let categories = [] as Awaited<ReturnType<typeof listBlogCategories>>;
+  let categoryLoadError = "";
+  let leadership = [] as Awaited<ReturnType<typeof listLeadership>>;
+  let leadershipLoadError = "";
 
   try {
     submissions = await listSubmissions();
@@ -120,6 +135,20 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
     blogLoadError =
       error instanceof Error ? error.message : "Unable to load blog posts.";
   }
+
+  try {
+    categories = await listBlogCategories();
+  } catch (error) {
+    categoryLoadError =
+      error instanceof Error ? error.message : "Unable to load categories.";
+  }
+
+  try {
+    leadership = await listLeadership();
+  } catch (error) {
+    leadershipLoadError =
+      error instanceof Error ? error.message : "Unable to load leadership.";
+  }
   const totals = submissions.reduce<Record<string, number>>((acc, item) => {
     acc[item.type] = (acc[item.type] ?? 0) + 1;
     return acc;
@@ -127,6 +156,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark text-text-main dark:text-white">
+      <SiteNav />
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-12">
         <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
@@ -298,6 +328,13 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             </div>
           ) : null}
 
+          {categoryLoadError ? (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {categoryLoadError} Check your Supabase keys in `/.env.local` and restart
+              the server.
+            </div>
+          ) : null}
+
           <form
             action="/api/admin/blog"
             className="mt-6 grid gap-4 md:grid-cols-2"
@@ -337,10 +374,16 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               <input
                 className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
                 id="category"
+                list="blog-category-options"
                 name="category"
                 placeholder="News, Impact, Report"
                 type="text"
               />
+              <datalist id="blog-category-options">
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name} />
+                ))}
+              </datalist>
             </div>
 
             <div className="md:col-span-2">
@@ -534,7 +577,330 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             )}
           </div>
         </section>
+
+        <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-800 dark:bg-surface-dark">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-bold">Blog Categories</h2>
+              <p className="text-sm text-text-muted">
+                Add or update the categories used on blog posts.
+              </p>
+            </div>
+          </div>
+
+          {resolvedSearchParams?.categoryError ? (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              Unable to update categories. Ensure the `blog_categories` table exists
+              in Supabase or remove Supabase keys to use local storage.
+            </div>
+          ) : null}
+
+          <form
+            action="/api/admin/categories"
+            className="mt-6 grid gap-4 md:grid-cols-3"
+            method="post"
+          >
+            <input name="action" type="hidden" value="add" />
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold" htmlFor="newCategoryName">
+                Category Name
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="newCategoryName"
+                name="name"
+                placeholder="e.g. News Update"
+                required
+                type="text"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold" htmlFor="newCategorySlug">
+                Slug (optional)
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="newCategorySlug"
+                name="slug"
+                placeholder="news-update"
+                type="text"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <button
+                className="h-12 w-full rounded-xl bg-primary text-base font-bold text-[#0d1b12] shadow-lg shadow-primary/20 transition hover:bg-primary-dark"
+                type="submit"
+              >
+                Add Category
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-8 grid gap-4">
+            {categories.length === 0 ? (
+              <p className="text-sm text-text-muted">No categories yet.</p>
+            ) : (
+              categories.map((category) => (
+                <div
+                  className="rounded-2xl border border-gray-200 p-4 text-sm dark:border-gray-800"
+                  key={category.id}
+                >
+                  <form
+                    action="/api/admin/categories"
+                    className="grid gap-3 md:grid-cols-[1.5fr_1.2fr_auto]"
+                    method="post"
+                  >
+                    <input name="action" type="hidden" value="update" />
+                    <input name="id" type="hidden" value={category.id} />
+                    <div>
+                      <label className="text-xs font-semibold text-text-muted">
+                        Name
+                      </label>
+                      <input
+                        className="mt-2 h-10 w-full rounded-xl border border-gray-200 bg-background-light px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                        name="name"
+                        defaultValue={category.name}
+                        required
+                        type="text"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-text-muted">
+                        Slug
+                      </label>
+                      <input
+                        className="mt-2 h-10 w-full rounded-xl border border-gray-200 bg-background-light px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                        name="slug"
+                        defaultValue={category.slug}
+                        type="text"
+                      />
+                    </div>
+                    <div className="flex flex-wrap items-end gap-2">
+                      <button
+                        className="h-10 rounded-xl border border-gray-200 bg-white px-4 text-xs font-semibold text-text-main shadow-sm transition hover:border-primary hover:text-primary dark:border-gray-700 dark:bg-surface-dark dark:text-white"
+                        type="submit"
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="h-10 rounded-xl border border-red-200 bg-red-50 px-4 text-xs font-semibold text-red-700 shadow-sm transition hover:border-red-400"
+                        formAction="/api/admin/categories"
+                        formMethod="post"
+                        name="action"
+                        value="delete"
+                        type="submit"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              ))
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-800 dark:bg-surface-dark">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-bold">Leadership</h2>
+              <p className="text-sm text-text-muted">
+                Update the leadership team shown on the About page.
+              </p>
+            </div>
+          </div>
+
+          {resolvedSearchParams?.leadershipError ? (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              Unable to update leadership. Ensure the `leadership` table exists in
+              Supabase or remove Supabase keys to use local storage.
+            </div>
+          ) : null}
+
+          {leadershipLoadError ? (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {leadershipLoadError} Check your Supabase keys in `/.env.local` and restart
+              the server.
+            </div>
+          ) : null}
+
+          <form
+            action="/api/admin/leadership"
+            className="mt-6 grid gap-4 md:grid-cols-3"
+            method="post"
+          >
+            <input name="action" type="hidden" value="add" />
+            <div>
+              <label className="text-sm font-semibold" htmlFor="leaderName">
+                Name
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="leaderName"
+                name="name"
+                placeholder="Full name"
+                required
+                type="text"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold" htmlFor="leaderRole">
+                Role
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="leaderRole"
+                name="role"
+                placeholder="Executive Director"
+                required
+                type="text"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold" htmlFor="leaderSort">
+                Sort Order
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="leaderSort"
+                name="sortOrder"
+                placeholder="1"
+                type="number"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold" htmlFor="leaderImage">
+                Image URL
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="leaderImage"
+                name="imageUrl"
+                placeholder="https://..."
+                type="url"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold" htmlFor="leaderAlt">
+                Alt Text
+              </label>
+              <input
+                className="mt-2 h-11 w-full rounded-xl border border-gray-200 bg-background-light px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                id="leaderAlt"
+                name="altText"
+                placeholder="Portrait description"
+                type="text"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <button
+                className="h-12 w-full rounded-xl bg-primary text-base font-bold text-[#0d1b12] shadow-lg shadow-primary/20 transition hover:bg-primary-dark"
+                type="submit"
+              >
+                Add Leadership Member
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-8 grid gap-4">
+            {leadership.length === 0 ? (
+              <p className="text-sm text-text-muted">No leadership entries yet.</p>
+            ) : (
+              leadership.map((member) => (
+                <div
+                  className="rounded-2xl border border-gray-200 p-4 text-sm dark:border-gray-800"
+                  key={member.id}
+                >
+                  <form
+                    action="/api/admin/leadership"
+                    className="grid gap-3 md:grid-cols-6"
+                    method="post"
+                  >
+                    <input name="action" type="hidden" value="update" />
+                    <input name="id" type="hidden" value={member.id} />
+                    <div className="md:col-span-2">
+                      <label className="text-xs font-semibold text-text-muted">
+                        Name
+                      </label>
+                      <input
+                        className="mt-2 h-10 w-full rounded-xl border border-gray-200 bg-background-light px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                        name="name"
+                        defaultValue={member.name}
+                        required
+                        type="text"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="text-xs font-semibold text-text-muted">
+                        Role
+                      </label>
+                      <input
+                        className="mt-2 h-10 w-full rounded-xl border border-gray-200 bg-background-light px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                        name="role"
+                        defaultValue={member.role}
+                        required
+                        type="text"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-text-muted">
+                        Order
+                      </label>
+                      <input
+                        className="mt-2 h-10 w-full rounded-xl border border-gray-200 bg-background-light px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                        name="sortOrder"
+                        defaultValue={member.sortOrder}
+                        type="number"
+                      />
+                    </div>
+                    <div className="md:col-span-3">
+                      <label className="text-xs font-semibold text-text-muted">
+                        Image URL
+                      </label>
+                      <input
+                        className="mt-2 h-10 w-full rounded-xl border border-gray-200 bg-background-light px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                        name="imageUrl"
+                        defaultValue={member.imageUrl}
+                        type="url"
+                      />
+                    </div>
+                    <div className="md:col-span-3">
+                      <label className="text-xs font-semibold text-text-muted">
+                        Alt Text
+                      </label>
+                      <input
+                        className="mt-2 h-10 w-full rounded-xl border border-gray-200 bg-background-light px-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-700 dark:bg-background-dark"
+                        name="altText"
+                        defaultValue={member.altText}
+                        type="text"
+                      />
+                    </div>
+                    <div className="md:col-span-6 flex flex-wrap gap-2">
+                      <button
+                        className="h-10 rounded-xl border border-gray-200 bg-white px-4 text-xs font-semibold text-text-main shadow-sm transition hover:border-primary hover:text-primary dark:border-gray-700 dark:bg-surface-dark dark:text-white"
+                        type="submit"
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="h-10 rounded-xl border border-red-200 bg-red-50 px-4 text-xs font-semibold text-red-700 shadow-sm transition hover:border-red-400"
+                        formAction="/api/admin/leadership"
+                        formMethod="post"
+                        name="action"
+                        value="delete"
+                        type="submit"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              ))
+            )}
+          </div>
+        </section>
       </div>
+      <SiteFooter />
     </div>
   );
 }
