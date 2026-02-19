@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -45,12 +46,14 @@ export default function SiteNav() {
             className="flex items-center gap-3 text-text-main dark:text-white"
             href="/"
           >
-            <div className="size-8 text-primary flex items-center justify-center">
-              <span className="material-symbols-outlined text-3xl">eco</span>
-            </div>
-            <h2 className="text-xl font-bold leading-tight tracking-tight">
-              CCAS
-            </h2>
+            <Image
+              src="/file/logo.jpeg"
+              alt="Clean Cooking Association of Somalia logo"
+              width={120}
+              height={40}
+              className="h-8 w-auto"
+              priority
+            />
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">

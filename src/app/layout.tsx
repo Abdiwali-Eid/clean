@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "CCAS Profile - Clean Cooking Association of Somalia",
   description:
     "Driving sustainable energy solutions for a healthier Somalia.",
+  icons: {
+    icon: "/file/favicon-32x32.png",
+  },
 };
 
 export default function RootLayout({
